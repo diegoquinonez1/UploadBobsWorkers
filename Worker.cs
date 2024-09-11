@@ -39,7 +39,6 @@ namespace UploadBobsWorkers
                             }
                             catch(Exception e)
                             {
-
                                 Console.WriteLine("BLob: " + Blob.Name);
                                 Console.WriteLine("Error: : " + e.Message);
                                 Console.WriteLine("Error: : " + Blob.CreateOn);
