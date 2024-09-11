@@ -39,7 +39,7 @@ namespace UploadBobsWorkers.Common
 
         private static void AddCompressedImages(PdfPage originalPage, PdfPage newPage)
         {
-            PdfCanvasProcessor processor = new (new ImageRenderListener(newPage, 1));
+            PdfCanvasProcessor processor = new (new ImageRenderListener(newPage));
             processor.ProcessPageContent(originalPage);
         }
     }

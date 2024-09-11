@@ -11,16 +11,14 @@ using iText.Kernel.Geom;
 
 namespace UploadBobsWorkers.Common
 {
-    public class ImageRenderListener(PdfPage newPage, int aux) : IEventListener
+    public class ImageRenderListener(PdfPage newPage) : IEventListener
     {
         private readonly PdfPage _newPage = newPage;
-        private int _aux = aux;
 
         public void EventOccurred(IEventData data, EventType type)
         {
             if (type == EventType.RENDER_IMAGE)
             {
-                _aux = 2;
                 ImageRenderInfo renderInfo = (ImageRenderInfo)data;
                 PdfImageXObject imageObject = renderInfo.GetImage();
                 if (imageObject != null)
@@ -28,7 +26,7 @@ namespace UploadBobsWorkers.Common
                     byte[] originalImageBytes = imageObject.GetImageBytes();
                     byte[] compressedImageBytes = CompressImage(originalImageBytes);
 
-                    AddCompressedImageToNewPage(renderInfo, compressedImageBytes);
+                    AddCompressedImageToNewPage(compressedImageBytes);
                 }
             }
         }
@@ -49,7 +47,7 @@ namespace UploadBobsWorkers.Common
         }
 
         // Añade la imagen comprimida al nuevo PDF
-        private void AddCompressedImageToNewPage(ImageRenderInfo renderInfo, byte[] compressedImageBytes)
+        private void AddCompressedImageToNewPage(byte[] compressedImageBytes)
         {
             PdfImageXObject compressedImageObject = new(ImageDataFactory.Create(compressedImageBytes));
             // Crear un PdfCanvas para la página y aplicar la matriz de transformación
@@ -58,9 +56,6 @@ namespace UploadBobsWorkers.Common
             pdfCanvas.AddXObjectAt(compressedImageObject, 0, 0);
         }
 
-        public ICollection<EventType> GetSupportedEvents()
-        {
-            return [EventType.RENDER_IMAGE];
-        }
+        public ICollection<EventType> GetSupportedEvents() => [EventType.RENDER_IMAGE];
     }
 }
