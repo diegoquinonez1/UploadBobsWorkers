@@ -52,13 +52,8 @@ namespace UploadBobsWorkers.Common
         private void AddCompressedImageToNewPage(ImageRenderInfo renderInfo, byte[] compressedImageBytes)
         {
             PdfImageXObject compressedImageObject = new(ImageDataFactory.Create(compressedImageBytes));
-
             // Crear un PdfCanvas para la página y aplicar la matriz de transformación
             PdfCanvas pdfCanvas = new (_newPage.NewContentStreamAfter(), _newPage.GetResources(), _newPage.GetDocument());
-
-            // Aplicar la transformación para ajustar el tamaño y posición de la imagen
-            //pdfCanvas.ConcatMatrix(pdfArray);
-
             // Añadir la imagen comprimida en la nueva página
             pdfCanvas.AddXObjectAt(compressedImageObject, 0, 0);
         }
